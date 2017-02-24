@@ -58,11 +58,47 @@ function bootstrapSpotifySearch(){
 
 /* COMPLETE THIS FUNCTION! */
 function displayAlbumsAndTracks(event) {
+  var albumsQueryRequest;
   var appendToMe = $('#albums-and-tracks');
+  var albumAndTracksUrl = "https://api.spotify.com/v1/artists/" + $(event.target).attr('data-spotify-id') + "/albums"
 
+  albumsQueryRequest = $.ajax({
+    type: "GET",
+    dataType: 'json',
+    url: albumAndTracksUrl
+  });
+
+  albumsQueryRequest.done(function(data) {
+    var albums = data;
+    albums.items.forEach(function(album) {
+      var albumLi = $("<li>" + album.name + "</li>")
+      albumLi.attr('data-spotify-id', album.id);
+      albumLi.attr('class', "albums");
+      appendToMe.append(albumLi);
+    });
+
+  });
+
+  albumsQueryRequest.fail(function(error) {
+    console.log("something failed during the album request:")
+    console.log(error);
+  })
   // These two lines can be deleted. They're mostly for show. 
-  console.log("you clicked on:");
-  console.log($(event.target).attr('data-spotify-id'));//.attr('data-spotify-id'));
+}
+
+function displayTracks() {
+  var tracksRequest;
+  var tracksUrl = "https://api.spotify.com/v1/albums/" + album.id + "/tracks";
+
+  tracksRequest = $.ajax({
+    type: "GET",
+    dataType: 'json',
+    url: tracksUrl
+  });
+
+  tracksRequest.done(function (data) {
+    var tracks = data;
+  })
 }
 
 /* YOU MAY WANT TO CREATE HELPER FUNCTIONS OF YOUR OWN */
